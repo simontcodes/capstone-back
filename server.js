@@ -6,17 +6,18 @@ const express = require("express");
 const axios = require("axios");
 //importing cors to be able to connect the back and front end in different domains
 const cors = require("cors");
+let PORT = process.env.PORT || 8080;
 
 const app = express();
-// const warehousesRoutes = require("./Routes/warehouses.js");
-// const inventoriesRoutes = require("./Routes/inventories.js");
-let PORT = process.env.PORT;
+const clientsRoutes = require("./Routes/clients.js");
+const loginRoutes = require("./Routes/login.js");
 
 app.use(cors());
 app.use(express.json());
 
 //linking routes with routers
-// app.use("/warehouses", warehousesRoutes);
+app.use("/login", loginRoutes);
+app.use("/clients", clientsRoutes);
 // app.use("/inventories", inventoriesRoutes);
 
 app.listen(PORT, () => {
