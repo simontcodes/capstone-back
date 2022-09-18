@@ -5,10 +5,10 @@ const utils = require("../Utils/Utils");
 //importing uuid to make unique ids for every item
 const uuid = require("uuid");
 
-// router.get("/", (_req, res) => {
-//     // Read the file
+router.get("/", (req, res) => {
+    // Read the file
 
-//     res.status(200).json(warehouses);
-//   });
+    res.status(200).json({message: `${req.name} you are authorized to see this`})
+  });
 
 module.exports = router;
