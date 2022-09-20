@@ -9,10 +9,10 @@ exports.up = function (knex) {
       table.string("firstName", 30).notNullable();
       table.string("lastName", 30).notNullable();
       table.string("email", 100).notNullable();
-      table.integer("phoneNumber").notNullable();
+      table.string("phoneNumber").notNullable();
       table.date("canadaVisitor");
       table.string("canadaStudent", 50);
-      table.integer("canadaYearsOfExpirience").unsigned();
+      table.string("canadaYearsOfExpirience");
       table.string("canadaWorker", 50);
       table.string("englishTest", 10);
       table.integer("englishSpeaking").unsigned();
@@ -57,5 +57,5 @@ exports.up = function (knex) {
  */
 exports.down = function (knex) {
       // delete the two tables
-      return knex.schema.dropTable("client").dropTable("appointment").dropTable("workExp");
+      return knex.schema.dropTable("workExp").dropTable("appointment").dropTable("client");
 };

@@ -15,6 +15,8 @@ let PORT = process.env.PORT || 8080;
 const app = express();
 const clientsRoutes = require("./Routes/clients.js");
 const loginRoutes = require("./Routes/login.js");
+const clientsPostRoutes = require("./Routes/clientsPost.js");
+const { client } = require("./knexfile.js");
 
 app.use(cors());
 app.use(express.json());
@@ -54,6 +56,7 @@ function authorize(req, res, next) {
 //linking routes with routers
 app.use("/login", loginRoutes);
 app.use("/clients", authorize, clientsRoutes);
+app.use("/clientsPost", clientsPostRoutes)
 // app.use("/inventories", inventoriesRoutes);
 
 app.listen(PORT, () => {
