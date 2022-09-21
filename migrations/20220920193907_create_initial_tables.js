@@ -5,12 +5,13 @@
 exports.up = function (knex) {
   return knex.schema
     .createTable("client", function (table) {
-      table.increments("id");
+      table.uuid("id").primary().defaultTo(knex.raw("(UUID())"));
       table.string("firstName", 30).notNullable();
       table.string("lastName", 30).notNullable();
       table.string("email", 100).notNullable();
       table.string("phoneNumber").notNullable();
-      table.date("canadaVisitor");
+      table.string("educationLevel");
+      table.string("canadaVisitor");
       table.string("canadaStudent", 50);
       table.string("canadaYearsOfExpirience");
       table.string("canadaWorker", 50);
@@ -21,23 +22,24 @@ exports.up = function (knex) {
       table.integer("englishListening").unsigned();
       table.string("provinceOfPreference", 30);
       table.string("cityOfPreference", 30);
-      table.boolean("studyInCanada");
+      table.string("studyInCanada");
     })
     .createTable("workExp", function (table) {
       table.increments("id");
-      table.integer("client_id").unsigned().notNullable();
+      // table.string("client_id").notNullable();
       table.string("jobTitle", 50).notNullable();
-      table.integer("yearsOfExperince").unsigned().notNullable();
+      table.string("yearsOfExperience").notNullable();
       table
-        .foreign("client_id")
+      .uuid("client_id")
         .references("id")
         .inTable("client")
         .onUpdate("CASCADE")
-        .onDelete("CASCADE");
+        .onDelete("CASCADE")
+        .defaultTo(knex.raw("(UUID())"));
     })
     .createTable("appointment", function (table) {
       table.increments("id");
-      table.integer("client_id").unsigned().notNullable();
+      table.string("client_id").notNullable();
       table.date("dateOfAppointment").notNullable();
       table.time("timeOfAppointment").notNullable();
       //make this nullable later
@@ -57,5 +59,5 @@ exports.up = function (knex) {
  */
 exports.down = function (knex) {
       // delete the two tables
-      return knex.schema.dropTable("workExp").dropTable("appointment").dropTable("client");
+      return knex.schema.dropTable("appointment").dropTable("workExp").dropTable("client");
 };
