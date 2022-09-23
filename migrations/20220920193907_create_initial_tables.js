@@ -40,10 +40,10 @@ exports.up = function (knex) {
     .createTable("appointment", function (table) {
       table.increments("id");
       table.string("client_id").notNullable();
-      table.date("dateOfAppointment").notNullable();
-      table.time("timeOfAppointment").notNullable();
+      table.string("dateOfAppointment").notNullable();
+      table.string("timeOfAppointment").notNullable();
       //make this nullable later
-      table.integer("payment").unsigned();
+      table.integer("typeOfService").unsigned();
       table
         .foreign("client_id")
         .references("id")
