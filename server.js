@@ -18,6 +18,7 @@ const clientsRoutes = require("./Routes/clients.js");
 const loginRoutes = require("./Routes/login.js");
 const clientsPostRoutes = require("./Routes/clientsPost.js");
 const paymentRoutes = require("./Routes/payment.js");
+const appointmentsRoutes = require("./Routes/appointments.js");
 const { client } = require("./knexfile.js");
 
 app.use(cors());
@@ -60,6 +61,7 @@ function authorize(req, res, next) {
 //linking routes with routers
 app.use("/login", loginRoutes);
 app.use("/clients", authorize, clientsRoutes);
+app.use("/appointments", authorize, appointmentsRoutes);
 app.use("/clientsPost", clientsPostRoutes)
 app.use("/payment", paymentRoutes);
 
