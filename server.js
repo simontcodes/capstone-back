@@ -2,6 +2,7 @@
 require("dotenv").config();
 //importing JWT to be able to send encryp and decrypt tokens
 const jwt = require("jsonwebtoken");
+// const utils = require("./utils/utils.js");
 // importing express
 const express = require("express");
 //importing axios to make api calls
@@ -21,6 +22,8 @@ const { client } = require("./knexfile.js");
 
 app.use(cors());
 app.use(express.json());
+
+
 
 function authorize(req, res, next) {
   //storing the request header that contains the token
@@ -59,7 +62,7 @@ app.use("/login", loginRoutes);
 app.use("/clients", authorize, clientsRoutes);
 app.use("/clientsPost", clientsPostRoutes)
 app.use("/payment", paymentRoutes);
-// app.use("/inventories", inventoriesRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`I'm here and I'm listening on port` + " " + PORT);
