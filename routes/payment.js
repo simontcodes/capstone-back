@@ -39,7 +39,7 @@ router.route("/").post(async (req, res) => {
           quantity: item.quantity,
         };
       }),
-      success_url: `${process.env.CLIENT_URL}/questionnaire`,
+      success_url: `${process.env.CLIENT_URL}/success`,
       cancel_url: `${process.env.CLIENT_URL}/booking`,
     });
     res.status(200).json({ url: session.url });
