@@ -12,31 +12,97 @@ const { v4: uuidv4 } = require("uuid");
 //sendgrid api key saved in .env file
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
 //importing sendgrid library
-const sgMail = require('@sendgrid/mail');
+const sgMail = require("@sendgrid/mail");
 // set api key on the api call
 sgMail.setApiKey(SENDGRID_API_KEY);
 
+// router.route("/").post(async (req, res) => {
+//   const clientWorkExp = JSON.parse(req.body.jobs);
+//   const clientInfo = {
+//     id: uuidv4(),
+//     firstName: req.body.firstName,
+//     lastName: req.body.lastName,
+//     email: req.body.email,
+//     phoneNumber: req.body.phoneNumber,
+//     educationLevel: req.body.educationLevel,
+//     canadaVisitor: req.body.canadaVisitor,
+//     canadaStudent: req.body.canadaStudent,
+//     canadaWorker: req.body.canadaWorker,
+//     canadaYearsOfExpirience: req.body.canadaYearsOfExpirience,
+//     studyInCanada: req.body.studyInCanada,
+//     englishTest: req.body.englishTest,
+//     englishListening: req.body.englishListening,
+//     englishReading: req.body.englishReading,
+//     englishSpeaking: req.body.englishSpeaking,
+//     englishWriting: req.body.englishWriting,
+//     provinceOfPreference: req.body.provinceOfPreference,
+//     cityOfPreference: req.body.cityOfPreference,
+//   };
+
+//   const clientAppointment = {
+//     dateOfAppointment: req.body.dateOfAppointment,
+//     timeOfAppointment: req.body.timeOfAppointment,
+//     client_id: clientInfo.id,
+//     typeOfService: req.body.typeOfService,
+//   };
+
+//   try {
+//     const resultCLient = await knex("client").insert(clientInfo);
+//     const createdClient = await knex("client").where({ id: resultCLient[0] });
+//     const resultAppointment = await knex("appointment").insert(
+//       clientAppointment
+//     );
+
+//     for (let i = 0; i < clientWorkExp.length; i++) {
+//       clientWorkExp[i].client_id = clientInfo.id;
+//     }
+//     for (let i = 0; i < clientWorkExp.length; i++) {
+//       await knex("workExp").insert(clientWorkExp[i]);
+//     }
+//     // ------------------------------------------------------
+//     console.log(clientInfo.email);
+//     // email message format
+//     const message = {
+//       to: `${clientInfo.email}`,
+//       from: {
+//         name: "CM Immigration.Inc",
+//         email: "simont.codes@gmail.com",
+//       },
+//       subject: "Appointment Details",
+//       text: "how cool is this",
+//       html: `<h1> Hi ${clientInfo.firstName} ${clientInfo.lastName}</h1>
+//                   <p>We will see you on ${clientAppointment.dateOfAppointment} at ${clientAppointment.timeOfAppointment} </p>
+//                   Holi estoy probando`,
+//     };
+
+//     // the actual api call  that returns a promise
+//     sgMail
+//       .send(message)
+//       .then((response) => {
+//         console.log("email sent");
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+
+//     // ------------------------------------------------------
+//     res.status(201).json(createdClient);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Unable to create client" });
+//   }
+// });
+
+// ---------------------------New client flow--------------------------------
 router.route("/").post(async (req, res) => {
-  const clientWorkExp = JSON.parse(req.body.jobs);
+  // const clientWorkExp = JSON.parse(req.body.jobs);
   const clientInfo = {
     id: uuidv4(),
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
-    educationLevel: req.body.educationLevel,
-    canadaVisitor: req.body.canadaVisitor,
-    canadaStudent: req.body.canadaStudent,
-    canadaWorker: req.body.canadaWorker,
-    canadaYearsOfExpirience: req.body.canadaYearsOfExpirience,
-    studyInCanada: req.body.studyInCanada,
-    englishTest: req.body.englishTest,
-    englishListening: req.body.englishListening,
-    englishReading: req.body.englishReading,
-    englishSpeaking: req.body.englishSpeaking,
-    englishWriting: req.body.englishWriting,
-    provinceOfPreference: req.body.provinceOfPreference,
-    cityOfPreference: req.body.cityOfPreference,
+    password: uuidv4(),
   };
 
   const clientAppointment = {
@@ -49,18 +115,16 @@ router.route("/").post(async (req, res) => {
   try {
     const resultCLient = await knex("client").insert(clientInfo);
     const createdClient = await knex("client").where({ id: resultCLient[0] });
-    const resultAppointment = await knex("appointment").insert(
-      clientAppointment
-    );
+    await knex("appointment").insert(clientAppointment);
 
-    for (let i = 0; i < clientWorkExp.length; i++) {
-      clientWorkExp[i].client_id = clientInfo.id;
-    }
-    for (let i = 0; i < clientWorkExp.length; i++) {
-      await knex("workExp").insert(clientWorkExp[i]);
-    }
+    // for (let i = 0; i < clientWorkExp.length; i++) {
+    //   clientWorkExp[i].client_id = clientInfo.id;
+    // }
+    // for (let i = 0; i < clientWorkExp.length; i++) {
+    //   await knex("workExp").insert(clientWorkExp[i]);
+    // }
     // ------------------------------------------------------
-    console.log(clientInfo.email)
+
     // email message format
     const message = {
       to: `${clientInfo.email}`,
@@ -68,24 +132,27 @@ router.route("/").post(async (req, res) => {
         name: "CM Immigration.Inc",
         email: "simont.codes@gmail.com",
       },
-          subject: "Appointment Details",
-          text: "how cool is this",
-          html: `<h1> Hi ${clientInfo.firstName} ${clientInfo.lastName}</h1>
+      subject: "Appointment Details",
+      text: "how cool is this",
+      html: `<h1> Hi ${clientInfo.firstName} ${clientInfo.lastName}</h1>
                   <p>We will see you on ${clientAppointment.dateOfAppointment} at ${clientAppointment.timeOfAppointment} </p>
-                  Holi estoy probando`,
-        };
-        
-        // the actual api call  that returns a promise
-        sgMail
-        .send(message)
-        .then((response) => {
-          console.log("email sent");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-        
-        // ------------------------------------------------------
+                  <p>this is your user: ${clientInfo.email}  </p>
+                  <p>this is your temporary password: ${clientInfo.password}</p>
+                  <p>Please log in and fill out the questionnaire before the appointment </p>
+                  `,
+    };
+
+    // the actual api call  that returns a promise
+    sgMail
+      .send(message)
+      .then((response) => {
+        console.log("email sent");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // ------------------------------------------------------
     res.status(201).json(createdClient);
   } catch (error) {
     console.log(error);

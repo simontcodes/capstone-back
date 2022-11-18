@@ -10,6 +10,7 @@ exports.up = function (knex) {
       table.string("lastName", 30).notNullable();
       table.string("email", 100).notNullable();
       table.string("phoneNumber").notNullable();
+      table.string("password").notNullable();
       table.string("educationLevel");
       table.string("canadaVisitor");
       table.string("canadaStudent", 50);
@@ -30,7 +31,7 @@ exports.up = function (knex) {
       table.string("jobTitle", 50).notNullable();
       table.string("yearsOfExperience").notNullable();
       table
-      .uuid("client_id")
+        .uuid("client_id")
         .references("id")
         .inTable("client")
         .onUpdate("CASCADE")
@@ -58,6 +59,9 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-      // delete the two tables
-      return knex.schema.dropTable("appointment").dropTable("workExp").dropTable("client");
+  // delete the two tables
+  return knex.schema
+    .dropTable("appointment")
+    .dropTable("workExp")
+    .dropTable("client");
 };
