@@ -103,6 +103,7 @@ router.route("/").post(async (req, res) => {
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
     password: uuidv4(),
+    isAdmin: false,
   };
 
   const clientAppointment = {

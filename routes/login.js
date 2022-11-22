@@ -18,16 +18,16 @@ router.post("/", (req, res) => {
   const admins = utils.readAdmins();
   const foundAdmin = admins.find((admin) => admin.email === email);
 
-
   //if the password of the found admin is the same as the password sent in the request respond with the token
   if (foundAdmin.password === password) {
     const token = jwt.sign({ name: foundAdmin.name }, JWT_SECRET_KEY);
     res.json({
       message: "Successfully logged in",
       token,
+      email: email,
     });
   } else {
-    res.status(403).json({error: 'Admin not Found'})
+    res.status(403).json({ error: "Admin not Found" });
   }
 });
 
