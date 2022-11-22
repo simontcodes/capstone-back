@@ -2,7 +2,7 @@
 require("dotenv").config();
 //importing JWT to be able to send encryp and decrypt tokens
 const jwt = require("jsonwebtoken");
-// const utils = require("./utils/utils.js");
+const utils = require("./utils/utils.js");
 // importing express
 const express = require("express");
 //importing axios to make api calls
@@ -21,6 +21,7 @@ const loginRoutes = require("./Routes/login.js");
 const clientsPostRoutes = require("./Routes/clientsPost.js");
 const paymentRoutes = require("./Routes/payment.js");
 const appointmentsRoutes = require("./Routes/appointments.js");
+const clientRoutes = require("./routes/client.js");
 const { client } = require("./knexfile.js");
 
 app.use(cors());
@@ -61,26 +62,63 @@ function authorize(req, res, next) {
 
 // ------------------------------------------
 function authGetClients(req, res, next) {
-  console.log("authGetClients is running");
-  console.log(req.headers.email);
+  async function findUser(userInfo) {
+    const email = req.headers.email;
 
-  const singleUser = knex
-    .select("*")
-    .from("client")
-    .where({ email: req.headers.email });
+    const foundUser = await knex
+      .select("*")
+      .from("client")
+      .where({ email: email });
 
-  if (singleUser.isAdmin === false) {
+    return foundUser[0];
+  }
+  let foundUser = {};
+  findUser(req).then((response) => {
+    foundUser = response;
+  });
+
+  //checks if the user is admin which is a boolean value
+
+  if (!foundUser.isAdmin) {
     res.status(401);
     return res.send("Not Allowed");
   }
 
   next();
 }
+
+function authGetClient(req, res, next) {
+  async function findUser(userInfo) {
+    const email = req.headers.email;
+
+    const foundUser = await knex
+      .select("*")
+      .from("client")
+      .where({ email: email });
+
+    return foundUser[0];
+  }
+
+  let foundUser = {};
+  findUser(req).then((response) => {
+    foundUser = response;
+    console.log(req.params.clientId);
+    //only lets an admin or the owner of the profile get access to /client:id
+    if (foundUser.isAdmin === 0 && foundUser.id !== req.params.clientId) {
+      res.status(401);
+      return res.send("Not Allowed");
+    }
+  });
+
+  next();
+}
+
 // --------------------------------------------------
 //linking routes with routers
 app.use("/login", loginRoutes);
 app.use("/clients", authorize, authGetClients, clientsRoutes);
-// ---------add a users route for clients to use-----------!!!--
+app.use("/client", authorize, authGetClient, clientRoutes);
+// ---------new added route -----------!!!--
 app.use("/appointments", authorize, appointmentsRoutes);
 app.use("/clientsPost", clientsPostRoutes);
 app.use("/payment", paymentRoutes);

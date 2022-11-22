@@ -11,23 +11,38 @@ const uuid = require("uuid");
 //using .env file to store private jwt key
 let JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-router.post("/", (req, res) => {
-  //using deconstruction to get username and password from the reques body
-  const { email, password } = req.body;
-  // Read the admins
-  const admins = utils.readAdmins();
-  const foundAdmin = admins.find((admin) => admin.email === email);
+//importing knex to do queries on the DB mySQL
+const knex = require("knex")(require("../knexfile"));
 
-  //if the password of the found admin is the same as the password sent in the request respond with the token
-  if (foundAdmin.password === password) {
-    const token = jwt.sign({ name: foundAdmin.name }, JWT_SECRET_KEY);
-    res.json({
-      message: "Successfully logged in",
-      token,
-      email: email,
-    });
-  } else {
-    res.status(403).json({ error: "Admin not Found" });
+router.post("/", async (req, res) => {
+  try {
+    //using deconstruction to get username and password from the reques body
+    const { email, password } = req.body;
+    console.log("email:", email, "password:", password);
+    // search DB for user that matches the email in the request
+    const foundUser = await knex
+      .select("*")
+      .from("client")
+      .where({ email: email });
+
+    if (!foundUser[0].email) {
+      res.status(404);
+      return res.send("User doesnt exist");
+    }
+
+    //if the password of the found admin is the same as the password sent in the request respond with the token
+    if (foundUser[0].password == password) {
+      const token = jwt.sign({ name: foundUser[0].firstName }, JWT_SECRET_KEY);
+      res.json({
+        message: "Successfully logged in",
+        token,
+        email: email,
+      });
+    } else {
+      res.status(403).json({ error: "Incorrect Password" });
+    }
+  } catch (error) {
+    console.log(error);
   }
 });
 

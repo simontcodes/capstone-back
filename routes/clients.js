@@ -18,30 +18,30 @@ router.route("/").get(async (req, res) => {
 
 module.exports = router;
 
-router.route("/client/:clientId").get(async (req, res) => {
-  try {
-    //Queriyng the data base to get single client by id
-    const singleClient = await knex
-      .select("*")
-      .from("client")
-      .where({ id: req.params.clientId });
-    //getting the appointments associated with that client
-      const clientAppointments = await knex
-      .select("*")
-      .from("appointment")
-      .where({ client_id: req.params.clientId });
-    //getting the work exp associated with that client
-      const clientWorkExperiences = await knex
-      .select("*")
-      .from("workExp")
-      .where({ client_id: req.params.clientId });
+// router.route("/client/:clientId").get(async (req, res) => {
+//   try {
+//     //Queriyng the data base to get single client by id
+//     const singleClient = await knex
+//       .select("*")
+//       .from("client")
+//       .where({ id: req.params.clientId });
+//     //getting the appointments associated with that client
+//       const clientAppointments = await knex
+//       .select("*")
+//       .from("appointment")
+//       .where({ client_id: req.params.clientId });
+//     //getting the work exp associated with that client
+//       const clientWorkExperiences = await knex
+//       .select("*")
+//       .from("workExp")
+//       .where({ client_id: req.params.clientId });
 
-      const fullClient = [singleClient, clientAppointments, clientWorkExperiences]
+//       const fullClient = [singleClient, clientAppointments, clientWorkExperiences]
 
-    res.status(200).json(fullClient);
-  } catch (error) {
-    res.status(404).json({ message: "client not found" });
-  }
-});
+//     res.status(200).json(fullClient);
+//   } catch (error) {
+//     res.status(404).json({ message: "client not found" });
+//   }
+// });
 
-module.exports = router;
+// module.exports = router;
