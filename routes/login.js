@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
   try {
     //using deconstruction to get username and password from the reques body
     const { email, password } = req.body;
-    console.log("email:", email, "password:", password);
+
     // search DB for user that matches the email in the request
     const foundUser = await knex
       .select("*")
@@ -37,6 +37,8 @@ router.post("/", async (req, res) => {
         message: "Successfully logged in",
         token,
         email: email,
+        isAdmin: foundUser[0].isAdmin,
+        id: foundUser[0].id,
       });
     } else {
       res.status(403).json({ error: "Incorrect Password" });

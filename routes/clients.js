@@ -12,7 +12,7 @@ router.route("/").get(async (req, res) => {
 
     res.status(200).json(clientData);
   } catch (error) {
-    res.status(500).json({ message: "Unable to retrieve clients data" });
+    // res.status(500).json({ message: "Unable to retrieve clients data" });
   }
 });
 

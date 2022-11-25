@@ -8,10 +8,8 @@ const readAdmins = () => {
 
 function authGetClients(req, res, next) {
   const email = req.headers.email;
-  console.log("at line 66", email);
-  const foundUser = knex.select("*").from("client").where({ email: email });
 
-  console.log(foundUser[0]);
+  const foundUser = knex.select("*").from("client").where({ email: email });
 
   //checks if the user is admin which is a boolean value
   if (foundUser[0].isAdmin === 0) {

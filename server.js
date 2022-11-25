@@ -75,16 +75,16 @@ function authGetClients(req, res, next) {
   let foundUser = {};
   findUser(req).then((response) => {
     foundUser = response;
+    //checks if the user is admin which is a boolean value
+    if (foundUser.isAdmin == 0) {
+      // res.status(401);
+      // return res.send("Not Allowed");
+      res.status(401);
+      return;
+    } else {
+      next();
+    }
   });
-
-  //checks if the user is admin which is a boolean value
-
-  if (!foundUser.isAdmin) {
-    res.status(401);
-    return res.send("Not Allowed");
-  }
-
-  next();
 }
 
 function authGetClient(req, res, next) {
@@ -102,11 +102,10 @@ function authGetClient(req, res, next) {
   let foundUser = {};
   findUser(req).then((response) => {
     foundUser = response;
-    console.log(req.params.clientId);
+
     //only lets an admin or the owner of the profile get access to /client:id
     if (foundUser.isAdmin === 0 && foundUser.id !== req.params.clientId) {
-      res.status(401);
-      return res.send("Not Allowed");
+      return res.status(401).send("Not Allowed");
     }
   });
 
@@ -119,7 +118,7 @@ app.use("/login", loginRoutes);
 app.use("/clients", authorize, authGetClients, clientsRoutes);
 app.use("/client", authorize, authGetClient, clientRoutes);
 // ---------new added route -----------!!!--
-app.use("/appointments", authorize, appointmentsRoutes);
+app.use("/appointments", authorize, authGetClients, appointmentsRoutes);
 app.use("/clientsPost", clientsPostRoutes);
 app.use("/payment", paymentRoutes);
 
