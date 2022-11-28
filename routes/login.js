@@ -39,6 +39,7 @@ router.post("/", async (req, res) => {
         email: email,
         isAdmin: foundUser[0].isAdmin,
         id: foundUser[0].id,
+        hasQuestions: foundUser[0].hasQuestions,
       });
     } else {
       res.status(403).json({ error: "Incorrect Password" });

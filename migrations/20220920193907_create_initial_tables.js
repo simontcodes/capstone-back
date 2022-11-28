@@ -12,6 +12,9 @@ exports.up = function (knex) {
       table.string("phoneNumber").notNullable();
       table.string("password").notNullable();
       table.boolean("isAdmin").notNullable();
+      table.boolean("hasQuestions").notNullable();
+      table.boolean("hasChangedPassword").notNullable();
+      table.string("citizenship");
       table.string("educationLevel");
       table.string("canadaVisitor");
       table.string("canadaStudent", 50);

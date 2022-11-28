@@ -102,8 +102,14 @@ router.route("/").post(async (req, res) => {
     lastName: req.body.lastName,
     email: req.body.email,
     phoneNumber: req.body.phoneNumber,
+    //creates a random password that the user gets in the email
     password: uuidv4(),
+    //all users created are NOT admins, admins are added manually to the DB
     isAdmin: false,
+    //this is to check if the user has filled the form
+    hasQuestions: false,
+    //this is to check if user has changed the temporary password
+    hasChangedPassword: false,
   };
 
   const clientAppointment = {

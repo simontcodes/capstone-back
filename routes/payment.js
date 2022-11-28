@@ -19,6 +19,15 @@ const storeItems = [
 
 router.route("/").post(async (req, res) => {
   try {
+    const foundUser = await knex
+      .select("*")
+      .from("client")
+      .where({ email: req.body.email });
+
+    if (foundUser.length) {
+      return res.status(401).json({ message: "User already exist" });
+    }
+
     const items = JSON.parse(req.body.items);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
