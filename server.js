@@ -80,8 +80,7 @@ function authGetClients(req, res, next) {
     if (foundUser.isAdmin == 0) {
       // res.status(401);
       // return res.send("Not Allowed");
-      res.status(401);
-      return;
+      return res.status(401).send("Not Allowed");
     } else {
       next();
     }
