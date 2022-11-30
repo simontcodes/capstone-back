@@ -24,6 +24,7 @@ router.route("/").post(async (req, res) => {
       .from("client")
       .where({ email: req.body.email });
 
+    //checks if user already exist in DB with email
     if (foundUser.length) {
       return res.status(401).json({ message: "User already exist" });
     }
