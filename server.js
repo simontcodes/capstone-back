@@ -23,6 +23,7 @@ const paymentRoutes = require("./Routes/payment.js");
 const appointmentsRoutes = require("./Routes/appointments.js");
 const clientRoutes = require("./routes/client.js");
 const questionnaireRoutes = require("./routes/questionnaire.js");
+const googleCalendarRoutes = require("./routes/googleCalendar.js");
 const { client } = require("./knexfile.js");
 
 app.use(cors());
@@ -122,6 +123,7 @@ app.use("/appointments", authorize, authGetClients, appointmentsRoutes);
 app.use("/clientsPost", clientsPostRoutes);
 app.use("/questionnaire", questionnaireRoutes);
 app.use("/payment", paymentRoutes);
+app.use("/googleCalendar", googleCalendarRoutes);
 
 app.listen(PORT, () => {
   console.log(`I'm here and I'm listening on port` + " " + PORT);
